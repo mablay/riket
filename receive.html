@@ -36,6 +36,7 @@
       conn.on('data', function(data){
         console.log('received:', data)
         inbox.innerHTML = data
+        conn.send('just got ' + data)
       });
     });
 

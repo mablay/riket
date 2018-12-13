@@ -47,16 +47,14 @@ var conn
 function initPeer (id) {
   console.log('connect to', id)
   conn = peer.connect(id)
-  // on open will be launch when you successfully connect to PeerServer
-  conn.on('open', function(){
-    // here you have conn.id
-    conn.send('hi!');
-  });
+  conn.on('open', function() {
+    conn.send('hi!')
+  })
+  conn.on('data', data => console.log('[sender] received: ' + data));
 }
 
 function clickConnect () {
   var id = $('receiverId').value
-  // console.log('connect', id)
   initPeer(id)
 }
 

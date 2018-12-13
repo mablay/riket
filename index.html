@@ -5,14 +5,90 @@
     <title>QR P2P</title>
     <base href="/">
     <link rel="stylesheet" href="/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   </head>
   <body>
     <div class="container">
-      <h1>QR Peer 2 Peer</h1>
-      <iframe src="send.html" width="45%" height="500px"></iframe>
-      <iframe src="receive.html" width="45%" height="500px"></iframe>
-      <!-- <div><a href="send.html">send</a></div>
-      <div><a href="receive.html">receive</a></div> -->
+      <h1>P2P Transmission</h1>
+
+      <!-- Setup -->
+      <div class="setup card">
+        <h2>Connection</h2>
+        <p>You are: <span id="local-id">...</span></p>
+        <button
+          type="button"
+          onclick="clickConnect()">
+          Connect to:
+        </button>
+        <input
+          id="remote-id"
+          placeholder="target ID"
+          type="text"
+          value="">
+      </div>
+
+      <!-- Send -->
+      <div class="outbox card">
+        <h2>Outbox</h2>
+        <textarea
+          id="payload"
+          rows="8"
+          cols="40"></textarea><br>
+        <button
+          type="button"
+          onclick="clickSend()">
+          Send
+        </button>
+      </div>
+
+      <!-- Receive -->
+      <div class="inbox card">
+        <h2>Inbox</h2>
+        <div id="inbox">
+          (nothing yet)
+        </div>
+      </div>
+
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.16/peer.min.js"></script>
+    <script type="text/javascript">
+var $ = document.getElementById.bind(document)
+var peer = new Peer()
+var conn = null
+
+// set local ID
+peer.on('open', () => ($('local-id').innerHTML = peer.id))
+
+// react to inbound connections
+peer.on('connection', dataConnection => {
+  console.log('inbound connection from', dataConnection.peer)
+  $('remote-id').value = dataConnection.peer
+  switchConnection(dataConnection)
+})
+
+function switchConnection (newConnection) {
+  conn = newConnection
+  conn.on('open', () => conn.send('hi!'))
+  conn.on('data', data => ($('inbox').innerHTML = data))
+}
+
+function connect (id) {
+  console.log('[connect] %s => %s', peer.id, id)
+  switchConnection(peer.connect(id))
+}
+
+function clickConnect () {
+  var id = $('remote-id').value
+  connect(id)
+}
+
+function clickSend () {
+  var payload = $('payload').value
+  console.log('[clickSend] sending:', payload)
+  if (conn) {
+    conn.send(payload)
+  }
+}
+    </script>
   </body>
 </html>
