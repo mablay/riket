@@ -51,44 +51,6 @@
 
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.16/peer.min.js"></script>
-    <script type="text/javascript">
-var $ = document.getElementById.bind(document)
-var peer = new Peer()
-var conn = null
-
-// set local ID
-peer.on('open', () => ($('local-id').innerHTML = peer.id))
-
-// react to inbound connections
-peer.on('connection', dataConnection => {
-  console.log('inbound connection from', dataConnection.peer)
-  $('remote-id').value = dataConnection.peer
-  switchConnection(dataConnection)
-})
-
-function switchConnection (newConnection) {
-  conn = newConnection
-  conn.on('open', () => conn.send('hi!'))
-  conn.on('data', data => ($('inbox').innerHTML = data))
-}
-
-function connect (id) {
-  console.log('[connect] %s => %s', peer.id, id)
-  switchConnection(peer.connect(id))
-}
-
-function clickConnect () {
-  var id = $('remote-id').value
-  connect(id)
-}
-
-function clickSend () {
-  var payload = $('payload').value
-  console.log('[clickSend] sending:', payload)
-  if (conn) {
-    conn.send(payload)
-  }
-}
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
