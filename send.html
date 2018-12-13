@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>QRP2P Send</title>
+  </head>
+  <body>
+    <h1>Send Data</h1>
+    <div><a href="index.html">back</a></div>
+
+    <!-- Setup -->
+    <div class="card">
+      <h2>P2P Connection</h2>
+      <input
+        placeholder="enter receiver ID"
+        type="text"
+        id="receiverId"
+        value="">
+      <button
+        onclick="clickConnect()"
+        type="button"
+        name="button">
+        Connect
+      </button>
+    </div>
+
+    <!-- Outbox -->
+    <div class="card">
+      <h2>Transmit</h2>
+      <textarea
+        id="payload"
+        rows="8"
+        cols="40"></textarea>
+      <button
+        type="button"
+        onclick="clickSend()">
+        Send
+      </button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.16/peer.min.js"></script>
+    <script type="text/javascript">
+var $ = document.getElementById.bind(document)
+var peer = new Peer()
+var conn
+
+function initPeer (id) {
+  console.log('connect to', id)
+  conn = peer.connect(id)
+  // on open will be launch when you successfully connect to PeerServer
+  conn.on('open', function(){
+    // here you have conn.id
+    conn.send('hi!');
+  });
+}
+
+function clickConnect () {
+  var id = $('receiverId').value
+  // console.log('connect', id)
+  initPeer(id)
+}
+
+function clickSend () {
+  var payload = $('payload').value
+  console.log('payload', payload)
+  if (conn) {
+    conn.send(payload)
+  }
+}
+    </script>
+  </body>
+</html>

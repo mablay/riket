@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>QRP2P Receive</title>
+  </head>
+  <body>
+    <h1>Receive Data</h1>
+    <div><a href="index.html">back</a></div>
+
+    <!-- Setup -->
+    <div class="setup-container">
+      <h2>P2P Connection</h2>
+      <p>Paste this ID into sender</p>
+      <div id="receiver-id">
+        ...
+      </div>
+    </div>
+    <div class="inbox-container">
+      <h2>Inbox</h2>
+      <div id="inbox">
+        (nothing yet)
+      </div>
+    </div>
+
+  </body>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.16/peer.min.js"></script>
+  <script type="text/javascript">
+    var $ = document.getElementById.bind(document)
+    var inbox = $('inbox')
+    var peer = new Peer()
+    console.log('Peer', peer)
+    peer.on('open', () => ($('receiver-id').innerHTML = peer.id))
+    peer.on('connection', function(conn) {
+      conn.on('data', function(data){
+        console.log('received:', data)
+        inbox.innerHTML = data
+      });
+    });
+
+  </script>
+</html>
