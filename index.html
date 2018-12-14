@@ -2,19 +2,20 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>QR P2P</title>
+    <title>RIKET</title>
     <base href="/">
     <link rel="stylesheet" href="/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   </head>
   <body>
     <div class="container">
-      <h1>P2P Transmission</h1>
+      <h1>RIKET</h1>
 
       <!-- Setup -->
       <div class="setup card">
-        <h2>Connection</h2>
-        <p>You are: <span id="local-id">...</span></p>
+        <h2>Your ID</h2>
+        <div id="qrcode"></div>
+        <p><span id="local-id">...</span></p>
         <button
           type="button"
           onclick="clickConnect()">
@@ -25,9 +26,11 @@
           placeholder="target ID"
           type="text"
           value="">
+        <video id="preview"></video>
+        <button onclick="clickScan()">scan QR code</button>
       </div>
 
-      <!-- Send -->
+      <!-- Communicate -->
       <div class="outbox card">
         <h2>Outbox</h2>
         <textarea
@@ -50,7 +53,9 @@
       </div>
 
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.16/peer.min.js"></script>
-    <script src="script.js"></script>
+    <script src="vendor/peer.min.js" type="text/javascript"></script>
+    <script src="vendor/qrcode.min.js" type="text/javascript"></script>
+    <script src="vendor/instascan.min.js" type="text/javascript"></script>
+    <script src="script.js" type="text/javascript"></script>
   </body>
 </html>

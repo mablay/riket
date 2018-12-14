@@ -1,9 +1,25 @@
 html, body {
   margin: 0;
-  /* height: 100%; */
+  text-align: center;
+}
+
+body {
+  font-family: verdana;
 }
 
 .container {
   padding-left: 12px;
   padding-right: 12px;
+}
+
+#local-id {
+  font-family: monospace;
+  font-size: 1.4em;
+  padding-right: 12px;
+}
+
+#qrcode {
+  padding: 20px;
+  margin: auto;
+  width: 256px;
 }

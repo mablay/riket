@@ -1,12 +1,23 @@
-/* eslint no-unused-vars: "off" */
-/* eslint no-undef: "off" */
+/* eslint no-unused-vars: 'off' */
+/* eslint no-undef: 'off' */
 
 var $ = document.getElementById.bind(document)
 var peer = new Peer()
 var conn = null
 
 // set local ID
-peer.on('open', () => ($('local-id').innerHTML = peer.id))
+peer.on('open', () => {
+  $('local-id').innerHTML = peer.id
+
+  var qrcode = new QRCode($('qrcode'), {
+    text: peer.id,
+    width: 256,
+    height: 256,
+    colorDark: '#000000',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  })
+})
 
 // react to inbound connections
 peer.on('connection', dataConnection => {
@@ -40,4 +51,21 @@ function clickSend () {
   if (conn) {
     conn.send(payload)
   }
+}
+
+function clickScan () {
+  const video = document.getElementById('preview')
+  const scanner = new Instascan.Scanner({ video })
+  scanner.addListener('scan', function (content) {
+    console.log(content)
+  })
+  Instascan.Camera.getCameras().then(function (cameras) {
+    if (cameras.length > 0) {
+      scanner.start(cameras[0])
+    } else {
+      console.error('No cameras found.')
+    }
+  }).catch(function (e) {
+    console.error(e)
+  })
 }
