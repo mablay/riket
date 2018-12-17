@@ -82,10 +82,13 @@ function clickSend () {
 function clickScan () {
   viewScanner()
   const video = document.getElementById('preview')
-  const scanner = new Instascan.Scanner({ video })
-  scanner.addListener('scan', function (content) {
-    // console.log(content)
-    alert(content)
+  const scanner = new Instascan.Scanner({
+    video,
+    mirror: false
+  })
+  scanner.addListener('scan', function (id) {
+    scanner.stop()
+    switchConnection(peer.connect(id))
   })
   Instascan.Camera.getCameras().then(function (cameras) {
     if (cameras.length > 0) {
