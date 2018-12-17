@@ -85,7 +85,7 @@ function clickScan () {
   const video = document.getElementById('preview')
   scanner = new Instascan.Scanner({
     video,
-    mirror: false
+    mirror: true
   })
   scanner.addListener('scan', function (id) {
     scanner.stop()
@@ -104,6 +104,7 @@ function clickScan () {
 
 function clickCancelScan () {
   if (!scanner) return
+  console.log(scanner)
   scanner.stop()
   viewConnection()
 }
