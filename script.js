@@ -8,6 +8,7 @@ var peer = new Peer({
   secure: true
 })
 var conn = null
+let scanner = null
 
 const views = {
   init: $('view-init'),
@@ -82,7 +83,7 @@ function clickSend () {
 function clickScan () {
   viewScanner()
   const video = document.getElementById('preview')
-  const scanner = new Instascan.Scanner({
+  scanner = new Instascan.Scanner({
     video,
     mirror: false
   })
@@ -99,6 +100,12 @@ function clickScan () {
   }).catch(function (e) {
     console.error(e)
   })
+}
+
+function clickCancelScan () {
+  if (!scanner) return
+  scanner.stop()
+  viewConnection()
 }
 
 function clickSwitchCamera () {
