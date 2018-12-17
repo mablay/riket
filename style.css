@@ -13,8 +13,8 @@ body {
 }
 
 #local-id {
-  font-family: monospace;
-  font-size: 1.4em;
+  font-family: "Lucida Console", Monaco;
+  font-size: 2.0em;
   padding-right: 12px;
 }
 

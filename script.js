@@ -2,12 +2,20 @@
 /* eslint no-undef: 'off' */
 
 var $ = document.getElementById.bind(document)
-var peer = new Peer()
+var peer = new Peer({
+  host: 'riket-operator.herokuapp.com',
+  port: 443,
+  secure: true
+})
 var conn = null
+
+// --- PeerJS ---//
 
 // set local ID
 peer.on('open', () => {
   $('local-id').innerHTML = peer.id
+  console.log('[PeerJS] OPEN | id:', peer.id)
+  viewConnection()
 
   var qrcode = new QRCode($('qrcode'), {
     text: peer.id,
@@ -33,16 +41,28 @@ function switchConnection (newConnection) {
   conn = newConnection
   conn.on('open', () => conn.send('hi!'))
   conn.on('data', data => ($('inbox').innerHTML = data))
+  viewMessenger()
 }
 
-function connect (id) {
-  console.log('[connect] %s => %s', peer.id, id)
-  switchConnection(peer.connect(id))
+// --- CHANGE VIEW --- //
+
+function viewMessenger () {
+  $('view-init').style.display = 'none'
+  $('view-messenger').style.display = 'block'
+  $('view-connection').style.display = 'none'
 }
+
+function viewConnection () {
+  $('view-init').style.display = 'none'
+  $('view-messenger').style.display = 'none'
+  $('view-connection').style.display = 'block'
+}
+
+// --- ACTIONS ---//
 
 function clickConnect () {
   var id = $('remote-id').value
-  connect(id)
+  switchConnection(peer.connect(id))
 }
 
 function clickSend () {

@@ -10,8 +10,14 @@
     <div class="container">
       <h1>RIKET</h1>
 
-      <!-- Setup -->
-      <div class="setup card">
+      <!-- INIT -->
+      <div id="view-init" class="view">
+        <h2>Network</h2>
+        <p>Waiting for network connection...</p>
+      </div>
+
+      <!-- CONNECTION -->
+      <div id="view-connection" class="view" style="display: none;">
         <h2>Your ID</h2>
         <div id="qrcode"></div>
         <p><span id="local-id">...</span></p>
@@ -29,29 +35,33 @@
         <button onclick="clickScan()">scan QR code</button>
       </div>
 
-      <!-- Communicate -->
-      <div class="outbox card">
-        <h2>Outbox</h2>
-        <textarea
-          id="payload"
-          rows="8"
-          cols="40"></textarea><br>
-        <button
-          type="button"
-          onclick="clickSend()">
-          Send
-        </button>
-      </div>
-
-      <!-- Receive -->
-      <div class="inbox card">
-        <h2>Inbox</h2>
-        <div id="inbox">
-          (nothing yet)
+      <!-- MESSENGER -->
+      <div id="view-messenger" class="view" style="display: none;">
+        <!-- RECEIVE -->
+        <div class="inbox card">
+          <h2>Inbox</h2>
+          <div id="inbox">
+            (nothing yet)
+          </div>
         </div>
-      </div>
 
+        <!-- SEND -->
+        <div class="outbox card">
+          <h2>Outbox</h2>
+          <textarea
+            id="payload"
+            rows="8"
+            cols="40"></textarea><br>
+          <button
+            type="button"
+            onclick="clickSend()">
+            Send
+          </button>
+        </div>
+
+      </div>
     </div>
+
     <script src="./vendor/peer.min.js" type="text/javascript"></script>
     <script src="./vendor/qrcode.min.js" type="text/javascript"></script>
     <script src="./vendor/instascan.min.js" type="text/javascript"></script>
