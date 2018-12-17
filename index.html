@@ -31,8 +31,27 @@
           placeholder="target ID"
           type="text"
           value="">
-        <video id="preview"></video>
         <button onclick="clickScan()">scan QR code</button>
+      </div>
+
+      <!-- QR SCANNER -->
+      <div id="view-scanner" class="view" style="display: none;">
+        <h2>Scan QR code</h2>
+        <div class="video-container">
+          <video id="preview"></video>
+        </div>
+        <div class="video-actions">
+          <button
+            type="button"
+            onclick="clickSwitchCamera()">
+            switch camera
+          </button>
+          <button
+            type="button"
+            onclick="viewConnection()">
+            cancel
+          </button>
+        </div>
       </div>
 
       <!-- MESSENGER -->

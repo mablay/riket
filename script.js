@@ -9,6 +9,13 @@ var peer = new Peer({
 })
 var conn = null
 
+const views = {
+  init: $('view-init'),
+  messenger: $('view-messenger'),
+  connection: $('view-connection'),
+  scanner: $('view-scanner')
+}
+
 // --- PeerJS ---//
 
 // set local ID
@@ -46,17 +53,16 @@ function switchConnection (newConnection) {
 
 // --- CHANGE VIEW --- //
 
-function viewMessenger () {
-  $('view-init').style.display = 'none'
-  $('view-messenger').style.display = 'block'
-  $('view-connection').style.display = 'none'
+function changeView (view) {
+  if (!(view in views)) throw new Error('Invalid view', view)
+  Object.keys(views).forEach(view => (views[view].style.display = 'none'))
+  views[view].style.display = 'block'
 }
 
-function viewConnection () {
-  $('view-init').style.display = 'none'
-  $('view-messenger').style.display = 'none'
-  $('view-connection').style.display = 'block'
-}
+function viewInit () { changeView('init') }
+function viewMessenger () { changeView('messenger') }
+function viewConnection () { changeView('connection') }
+function viewScanner () { changeView('scanner') }
 
 // --- ACTIONS ---//
 
@@ -74,18 +80,25 @@ function clickSend () {
 }
 
 function clickScan () {
+  viewScanner()
   const video = document.getElementById('preview')
   const scanner = new Instascan.Scanner({ video })
   scanner.addListener('scan', function (content) {
-    console.log(content)
+    // console.log(content)
+    alert(content)
   })
   Instascan.Camera.getCameras().then(function (cameras) {
     if (cameras.length > 0) {
-      scanner.start(cameras[0])
+      scanner.start(cameras[cameras.length - 1])
     } else {
       console.error('No cameras found.')
     }
   }).catch(function (e) {
     console.error(e)
   })
+}
+
+function clickSwitchCamera () {
+  const cameras = Instascan.Camera.getCameras()
+  console.log('cameras', cameras)
 }
