@@ -17,6 +17,14 @@ const views = {
   scanner: $('view-scanner')
 }
 
+$('payload').addEventListener('keyup', event => {
+  if (event.keyCode === 13) {
+    event.preventDefault()
+    clickSend()
+    $('payload').value = ''
+  }
+})
+
 // --- PeerJS ---//
 
 // set local ID
