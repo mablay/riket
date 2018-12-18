@@ -55,7 +55,7 @@ function switchConnection (newConnection) {
     conn.close()
   }
   conn = newConnection
-  conn.on('open', () => conn.send('hi!'))
+  conn.on('open', () => conn.send('connected to ' + conn.peer))
   conn.on('data', data => ($('inbox').innerHTML = data))
   viewMessenger()
 }
