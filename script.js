@@ -60,9 +60,9 @@ function switchConnection (newConnection) {
   conn.on('open', () => conn.send('connected to ' + conn.peer))
   conn.on('data', data => {
     if (typeof data === 'string') {
-      $('inbox').innerHTML = data
+      receivedMessage(data)
     } else if (data.type === 'message') {
-      $('inbox').innerHTML = data.payload
+      receivedMessage(data.payload)
     } else if (data.type === 'file') {
       $('inbox').innerHTML = data.filetype
       if (data.payload instanceof ArrayBuffer) {
