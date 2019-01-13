@@ -85,6 +85,7 @@ function switchConnection (newConnection) {
       }
     } else {
       $('inbox').innerHTML = '<span class="error">INVALID DATA!</span>'
+      console.error('Invalid data', data)
     }
   })
   viewMessenger()
@@ -107,7 +108,7 @@ function viewScanner () { changeView('scanner') }
 
 function clickConnect () {
   var id = $('remote-id').value
-  switchConnection(peer.connect(id))
+  switchConnection(peer.connect(id, { reliable: true }))
 }
 
 function clickSend () {
