@@ -79,7 +79,9 @@ function switchConnection (newConnection) {
             receivedFile(blob)
           }
         } else {
-          console.log('Recieved conReceiveBuffer length:', conReceiveBuffer)
+          const progress = (100 * data.progress).toFixed(2) + '%'
+          console.log('transfer progress', progress)
+          $('inbox').innerHTML = `Loading ${progress}`
         }
       } else {
         console.error('Invalid payload! Expected ArrayBuffer')
@@ -190,7 +192,7 @@ function changeUpload (files) {
   if (!file) {
     return console.log('no files selected')
   }
-  const chunkSize = 1024 * 16
+  const chunkSize = 1024 * 512
   let offset = 0
   const fileReader = new FileReader()
   const readSlice = o => {
