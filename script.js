@@ -56,7 +56,10 @@ function switchConnection (newConnection) {
   }
   conn = newConnection
   conn.on('open', () => conn.send('connected to ' + conn.peer))
-  conn.on('data', data => ($('inbox').innerHTML = data))
+  conn.on('data', data => {
+    console.log('[WebRTC] received type', typeof data)
+    $('inbox').innerHTML = data
+  })
   viewMessenger()
 }
 
@@ -120,4 +123,31 @@ function clickCancelScan () {
 function clickSwitchCamera () {
   const cameras = Instascan.Camera.getCameras()
   console.log('cameras', cameras)
+}
+
+function changeUpload (files) {
+  const file = files[0]
+  if (!file) {
+    return console.log('no files selected')
+  }
+  const chunkSize = 1024 * 16
+  let offset = 0
+  const fileReader = new FileReader()
+  const readSlice = o => {
+    console.log('readSlice ', o)
+    const slice = file.slice(offset, o + chunkSize)
+    fileReader.readAsArrayBuffer(slice)
+  }
+  fileReader.addEventListener('error', error => console.error('Error reading file:', error))
+  fileReader.addEventListener('abort', event => console.log('File reading aborted:', event))
+  fileReader.addEventListener('load', e => {
+    console.log('FileRead.onload ', e)
+    conn.send(e.target.result)
+    offset += e.target.result.byteLength
+    if (offset < file.size) {
+      readSlice(offset)
+    }
+  })
+  readSlice(0)
+  console.log('[Upload] file', file)
 }
