@@ -72,6 +72,7 @@ function switchConnection (newConnection) {
         if (receivedSize === data.size) {
           const blob = new Blob(conReceiveBuffer)
           conReceiveBuffer = []
+          receivedSize = 0
           if (data.filetype.split('/')[0] === 'image') {
             receivedImage(blob)
           } else {
