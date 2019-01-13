@@ -9,7 +9,7 @@
   <body>
     <div class="container">
       <h1>RIKET</h1>
-      <div class="version">v0.2.5</div>
+      <div class="version">v0.2.6</div>
 
       <!-- INIT -->
       <div id="view-init" class="view">
@@ -68,23 +68,27 @@
         <!-- SEND -->
         <div class="outbox card">
           <h2>Outbox</h2>
+          <span class="upload-button">
+            <input
+              id="upload"
+              type="file"
+              name="file"
+              class="unseen"
+              onchange="changeUpload(this.files)"
+            />
+            <label for="upload" class="button">
+              &#8682;
+            </label>
+          </span>
           <input
             id="payload"
             size="40"
             value=""/>
-          <br>
           <button
             type="button"
             onclick="clickSend()">
             Send
           </button>
-        </div>
-
-        <div class="upload card">
-          <input
-            id="upload"
-            onchange="changeUpload(this.files)"
-            type="file"/>
         </div>
 
       </div>

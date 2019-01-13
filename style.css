@@ -19,6 +19,28 @@ body {
   color: lightgrey;
 }
 
+.unseen {
+  /* visibility: hidden etc. wont work */
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  z-index: -1;
+}
+.unseen:focus + label {
+  /* keyboard navigation */
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 5px;
+}
+.unseen + label * {
+  pointer-events: none;
+}
+
+.button {
+  cursor: pointer;
+}
+
 #local-id {
   font-family: "Lucida Console", Monaco;
   font-size: 2.0em;
