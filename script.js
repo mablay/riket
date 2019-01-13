@@ -91,6 +91,18 @@ function switchConnection (newConnection) {
   viewMessenger()
 }
 
+function receivedMessage (text) {
+  if (
+    text.toLowerCase().startsWith('http://') ||
+    text.toLowerCase().startsWith('https://')
+  ) {
+    const [link, ...words] = text.split(' ')
+    $('inbox').innerHTML = `<a href="${link}">${link}</a> ${words.join(' ')}`
+  } else {
+    $('inbox').innerHTML = text
+  }
+}
+
 function receivedImage (blob) {
   const img = document.createElement('img')
   img.src = URL.createObjectURL(blob)
