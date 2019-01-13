@@ -1,6 +1,6 @@
 {
   "name": "riket",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "p2p data exchange",
   "main": "index.js",
   "scripts": {
