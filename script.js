@@ -72,11 +72,11 @@ function switchConnection (newConnection) {
         if (receivedSize === data.size) {
           const blob = new Blob(conReceiveBuffer)
           conReceiveBuffer = []
-          const download = document.createElement('a')
-          download.href = URL.createObjectURL(blob)
-          download.download = data.name
-          download.textContent = 'download'
-          $('inbox').append(download)
+          if (data.filetype.split('/')[0] === 'image') {
+            receivedImage(blob)
+          } else {
+            receivedFile(blob)
+          }
         } else {
           console.log('Recieved conReceiveBuffer length:', conReceiveBuffer)
         }
@@ -89,6 +89,22 @@ function switchConnection (newConnection) {
     }
   })
   viewMessenger()
+}
+
+function receivedImage (blob) {
+  const img = document.createElement('img')
+  img.src = URL.createObjectURL(blob)
+  $('inbox').innerHTML = ''
+  $('inbox').append(img)
+}
+
+function receivedFile (blob) {
+  const download = document.createElement('a')
+  download.href = URL.createObjectURL(blob)
+  download.download = data.name
+  download.textContent = 'download'
+  $('inbox').innerHTML = ''
+  $('inbox').append(download)
 }
 
 // --- CHANGE VIEW --- //
