@@ -1,13 +1,15 @@
 /* eslint no-unused-vars: 'off' */
 /* eslint no-undef: 'off' */
 
-var $ = document.getElementById.bind(document)
-var peer = new Peer({
+let $ = document.getElementById.bind(document)
+let peer = new Peer({
   host: 'riket-operator.herokuapp.com',
   port: 443,
   secure: true
 })
-var conn = null
+let conn = null
+let conReceiveBuffer = []
+let receivedSize = 0
 let scanner = null
 
 const views = {
@@ -57,8 +59,33 @@ function switchConnection (newConnection) {
   conn = newConnection
   conn.on('open', () => conn.send('connected to ' + conn.peer))
   conn.on('data', data => {
-    console.log('[WebRTC] received type', typeof data)
-    $('inbox').innerHTML = data
+    if (typeof data === 'string') {
+      $('inbox').innerHTML = data
+    } else if (data.type === 'message') {
+      $('inbox').innerHTML = data.payload
+    } else if (data.type === 'file') {
+      $('inbox').innerHTML = data.filetype
+      if (data.payload instanceof ArrayBuffer) {
+        receivedSize += data.payload.byteLength
+        console.log('Recieved byteLength:', receivedSize)
+        conReceiveBuffer.push(data.payload)
+        if (receivedSize === data.size) {
+          const blob = new Blob(conReceiveBuffer)
+          conReceiveBuffer = []
+          const download = document.createElement('a')
+          download.href = URL.createObjectURL(blob)
+          download.download = data.name
+          download.textContent = 'download'
+          $('inbox').append(download)
+        } else {
+          console.log('Recieved conReceiveBuffer length:', conReceiveBuffer)
+        }
+      } else {
+        console.error('Invalid payload! Expected ArrayBuffer')
+      }
+    } else {
+      $('inbox').innerHTML = '<span class="error">INVALID DATA!</span>'
+    }
   })
   viewMessenger()
 }
@@ -87,7 +114,10 @@ function clickSend () {
   var payload = $('payload').value
   console.log('[clickSend] sending:', payload)
   if (conn) {
-    conn.send(payload)
+    conn.send({
+      type: 'message',
+      payload
+    })
   }
 }
 
@@ -142,7 +172,14 @@ function changeUpload (files) {
   fileReader.addEventListener('abort', event => console.log('File reading aborted:', event))
   fileReader.addEventListener('load', e => {
     console.log('FileRead.onload ', e)
-    conn.send(e.target.result)
+    conn.send({
+      type: 'file',
+      filetype: file.type,
+      size: file.size,
+      progress: (offset + e.target.result.byteLength) / file.size,
+      name: file.name,
+      payload: e.target.result
+    })
     offset += e.target.result.byteLength
     if (offset < file.size) {
       readSlice(offset)
