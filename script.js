@@ -74,9 +74,9 @@ function switchConnection (newConnection) {
           conReceiveBuffer = []
           receivedSize = 0
           if (data.filetype.split('/')[0] === 'image') {
-            receivedImage(blob)
+            receivedImage(blob, data.name)
           } else {
-            receivedFile(blob)
+            receivedFile(blob, data.name)
           }
         } else {
           const progress = (100 * data.progress).toFixed(2) + '%'
@@ -106,14 +106,19 @@ function receivedMessage (text) {
   }
 }
 
-function receivedImage (blob) {
+function receivedImage (blob, filename) {
   const img = document.createElement('img')
   img.src = URL.createObjectURL(blob)
+  img.classList.add('received-img')
+  const download = document.createElement('a')
+  download.href = img.src
+  download.download = filename
+  download.append(img)
   $('inbox').innerHTML = ''
-  $('inbox').append(img)
+  $('inbox').append(download)
 }
 
-function receivedFile (blob) {
+function receivedFile (blob, filename) {
   const download = document.createElement('a')
   download.href = URL.createObjectURL(blob)
   download.download = data.name
@@ -196,14 +201,14 @@ function changeUpload (files) {
   let offset = 0
   const fileReader = new FileReader()
   const readSlice = o => {
-    console.log('readSlice ', o)
+    console.log('upload %s%', (100 * o / file.size).toFixed(2))
     const slice = file.slice(offset, o + chunkSize)
     fileReader.readAsArrayBuffer(slice)
   }
   fileReader.addEventListener('error', error => console.error('Error reading file:', error))
   fileReader.addEventListener('abort', event => console.log('File reading aborted:', event))
   fileReader.addEventListener('load', e => {
-    console.log('FileRead.onload ', e)
+    // console.log('FileRead.onload ', e)
     conn.send({
       type: 'file',
       filetype: file.type,

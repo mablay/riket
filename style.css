@@ -14,7 +14,7 @@ body {
 
 .version {
   position: absolute;
-  bottom: 10px;
+  top: 10px;
   right: 10px;
   color: lightgrey;
 }
@@ -39,6 +39,10 @@ body {
 
 .button {
   cursor: pointer;
+}
+
+.received-img {
+  max-width: 100%
 }
 
 #local-id {
