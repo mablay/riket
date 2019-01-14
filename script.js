@@ -57,7 +57,7 @@ function switchConnection (newConnection) {
     conn.close()
   }
   conn = newConnection
-  conn.on('open', () => conn.send('connected to ' + conn.peer))
+  conn.on('open', () => conn.send('connected to ' + peer.id))
   conn.on('data', data => {
     if (typeof data === 'string') {
       receivedMessage(data)
